@@ -1,69 +1,54 @@
 package com.testTasks.CSVParserAPI.service;
 
-
-import com.testTasks.CSVParserAPI.entity.InstitutionEntity;
-import com.testTasks.CSVParserAPI.model.DatabaseManager;
-import com.testTasks.CSVParserAPI.model.FileManager;
-import com.testTasks.CSVParserAPI.model.Institution;
 import com.testTasks.CSVParserAPI.repository.InstitutionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.testTasks.CSVParserAPI.repository.entity.InstitutionEntity;
+import com.testTasks.CSVParserAPI.utils.RarService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class InstitutionService {
 
-    @Autowired
-    private InstitutionRepository institutionRepository;
+    private final InstitutionRepository institutionRepository;
+    private final ParsingService parsingService;
 
-    public void updateListOfInstitutes(String linkForDownloading) {
-        FileManager fileManager = new FileManager();
-        DatabaseManager databaseManager = new DatabaseManager();
-        fileManager.downloadRar(linkForDownloading);
-        fileManager.unrarCSV();
-        fileManager.removeRar();
-        databaseManager.saveEntityToDatabase(institutionRepository);
-        fileManager.removeCSV();
-    }
-    public List<Institution> findAll() {
-        List<Institution> institutions = new ArrayList<>();
-        var found = institutionRepository.findAll();
-        for (InstitutionEntity institutionEntity: found){
-            institutions.add(Institution.toModel(institutionEntity));
-        }
-        return institutions;
+    public void updateDatabase(MultipartFile multipartFile) throws IOException {
+
+        Path archive = Files.createTempFile("arch_", null);
+        Path unpacked = Files.createTempFile("unp_", null);
+        Files.copy(multipartFile.getInputStream(), archive, StandardCopyOption.REPLACE_EXISTING);
+        //One must be crucified for writing shit like this
+        unpacked = RarService.extractArchive(archive.toFile(), unpacked.toFile());
+
+        List<InstitutionEntity> entities = parsingService.parse(unpacked);
+        institutionRepository.saveAll(entities);
     }
 
-    public List<Institution> sortByName() {
-        List<Institution> institutions = findAll();
-        institutions.sort((institution1, institution2) ->
-                institution1.getName().compareTo(institution2.getName())
-        );
-        return institutions;
+    public List<InstitutionEntity> findAll() {
+        return institutionRepository.findAll();
     }
 
-    public List<Institution> sortByState() {
-        List<Institution> institutions = findAll();
-        institutions.sort((institution1, institution2) ->
-                institution1.getState().compareTo(institution2.getState())
-        );
-        return institutions;
+    public List<InstitutionEntity> sortByName() {
+        return institutionRepository.findAllByOrderByName();
     }
 
-    public List<Institution> sortByPhoneNumber() {
-        List<Institution> institutions = findAll();
-        institutions.sort((institution1, institution2) ->
-                institution1.getPhoneNumber().compareTo(institution2.getPhoneNumber())
-        );
-        return institutions;
+    public List<InstitutionEntity> sortByState() {
+        return institutionRepository.findAllByOrderByState();
     }
 
-    public List<Institution> sortByInstitution() {
-        List<Institution> institutions = findAll();
-        institutions.sort((institution1, institution2) ->
-                institution1.getInstitution().compareTo(institution2.getInstitution())
-        );
-        return institutions;
+    public List<InstitutionEntity> sortByPhoneNumber() {
+        return institutionRepository.findAllByOrderByPhoneNumber();
+    }
+
+    public List<InstitutionEntity> sortByInstitution() {
+        return institutionRepository.findAllByOrderByType();
     }
 }

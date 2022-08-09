@@ -1,49 +1,63 @@
 package com.testTasks.CSVParserAPI.controller;
 
-
-import com.testTasks.CSVParserAPI.model.FileManager;
-import com.testTasks.CSVParserAPI.model.FinderPath;
+import com.testTasks.CSVParserAPI.repository.entity.InstitutionEntity;
 import com.testTasks.CSVParserAPI.service.InstitutionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/institutions")
+@RequiredArgsConstructor
 public class InstitutionController {
-    @Autowired
-    private InstitutionService institutionService;
+
+    private final InstitutionService institutionService;
+
+    @GetMapping("/healthcheck")
+    public ResponseEntity<?> healthCheck() {
+        return ResponseEntity.ok("Up and running");
+    }
 
     @PostMapping("/update")
-    public ResponseEntity updateDatabase(@RequestParam String linkForDownloading){
-        new FileManager().downloadRar(linkForDownloading);
-        institutionService.updateListOfInstitutes(linkForDownloading);
-        return ResponseEntity.ok("The list of Institute was updated");
+    public ResponseEntity<?> updateDatabase(@RequestParam("file") MultipartFile file) {
+        try {
+            institutionService.updateDatabase(file);
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().body("Broken file");
+        }
+        return ResponseEntity.ok().body("The list of Institute was updated");
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity getAll(){
-        return ResponseEntity.ok(institutionService.findAll());
+    public ResponseEntity<List<InstitutionEntity>> getAll() {
+        return ResponseEntity.ok().body(institutionService.findAll());
     }
 
     @GetMapping("/getAllSortByName")
-    public ResponseEntity getAllSortByName(){
-        return ResponseEntity.ok(institutionService.sortByName());
+    public ResponseEntity<List<InstitutionEntity>> getAllSortByName() {
+        return ResponseEntity.ok().body(institutionService.sortByName());
     }
 
     @GetMapping("/getAllSortByPhoneNumber")
-    public ResponseEntity getAllSortByPhoneNumber(){
-        return ResponseEntity.ok(institutionService.sortByPhoneNumber());
+    public ResponseEntity<List<InstitutionEntity>> getAllSortByPhoneNumber() {
+        return ResponseEntity.ok().body(institutionService.sortByPhoneNumber());
     }
 
     @GetMapping("/getAllSortByState")
-    public ResponseEntity getAllSortByState(){
-        return ResponseEntity.ok(institutionService.sortByState());
+    public ResponseEntity<List<InstitutionEntity>> getAllSortByState() {
+        return ResponseEntity.ok().body(institutionService.sortByState());
     }
 
     @GetMapping("/getAllSortByInstitution")
-    public ResponseEntity getAllSortByInstitution(){
-        return ResponseEntity.ok(institutionService.sortByInstitution());
+    public ResponseEntity<List<InstitutionEntity>> getAllSortByInstitution() {
+        return ResponseEntity.ok().body(institutionService.sortByInstitution());
     }
 }
