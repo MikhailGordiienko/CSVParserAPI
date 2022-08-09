@@ -18,9 +18,9 @@ import java.nio.file.Path;
  * A lot of deprecated methods, so probably it would be better to use unrar from OS, or make a client to use conventional file types.
  */
 @UtilityClass
-public class RarService {
+public class RarUtils {
 
-    private static final Log logger = LogFactory.getLog(RarService.class.getName());
+    private static final Log logger = LogFactory.getLog(RarUtils.class.getName());
 
     public static Path extractArchive(File archive, File destination) {
         Archive arch = null;

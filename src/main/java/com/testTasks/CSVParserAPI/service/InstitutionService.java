@@ -2,7 +2,7 @@ package com.testTasks.CSVParserAPI.service;
 
 import com.testTasks.CSVParserAPI.repository.InstitutionRepository;
 import com.testTasks.CSVParserAPI.repository.entity.InstitutionEntity;
-import com.testTasks.CSVParserAPI.utils.RarService;
+import com.testTasks.CSVParserAPI.utils.RarUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +26,7 @@ public class InstitutionService {
         Path unpacked = Files.createTempFile("unp_", null);
         Files.copy(multipartFile.getInputStream(), archive, StandardCopyOption.REPLACE_EXISTING);
         //One must be crucified for writing shit like this
-        unpacked = RarService.extractArchive(archive.toFile(), unpacked.toFile());
+        unpacked = RarUtils.extractArchive(archive.toFile(), unpacked.toFile());
 
         List<InstitutionEntity> entities = parsingService.parse(unpacked);
         institutionRepository.saveAll(entities);
