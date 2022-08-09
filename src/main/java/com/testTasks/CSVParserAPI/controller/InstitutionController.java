@@ -42,8 +42,8 @@ public class InstitutionController {
     }
 
     @GetMapping("/getAllSortByName")
-    public ResponseEntity<List<InstitutionEntity>> getAllSortByName() {
-        return ResponseEntity.ok().body(institutionService.sortByName());
+    public ResponseEntity<List<InstitutionEntity>> getAllSortByName(@RequestParam("asc") Boolean asc) {
+        return ResponseEntity.ok().body(institutionService.sortByName(asc));
     }
 
     @GetMapping("/getAllSortByPhoneNumber")

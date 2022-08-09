@@ -11,6 +11,8 @@ public interface InstitutionRepository extends JpaRepository<InstitutionEntity, 
 
     List<InstitutionEntity> findAllByOrderByName();
 
+    List<InstitutionEntity> findAllByOrderByNameDesc();
+
     List<InstitutionEntity> findAllByOrderByState();
 
     List<InstitutionEntity> findAllByOrderByPhoneNumber();

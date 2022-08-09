@@ -36,8 +36,12 @@ public class InstitutionService {
         return institutionRepository.findAll();
     }
 
-    public List<InstitutionEntity> sortByName() {
-        return institutionRepository.findAllByOrderByName();
+    public List<InstitutionEntity> sortByName(Boolean asc) {
+        if (asc) {
+            return institutionRepository.findAllByOrderByName();
+        } else {
+            return institutionRepository.findAllByOrderByNameDesc();
+        }
     }
 
     public List<InstitutionEntity> sortByState() {
