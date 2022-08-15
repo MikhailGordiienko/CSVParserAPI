@@ -17,7 +17,6 @@ public class InstitutionController {
 
     @PostMapping("/update")
     public ResponseEntity updateDatabase(@RequestParam String linkForDownloading){
-        new FileManager().downloadRar(linkForDownloading);
         institutionService.updateListOfInstitutes(linkForDownloading);
         return ResponseEntity.ok("The list of Institute was updated");
     }
