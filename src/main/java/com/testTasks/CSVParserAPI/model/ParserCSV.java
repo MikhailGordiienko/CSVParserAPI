@@ -34,6 +34,29 @@ public class ParserCSV {
         return institutions;
     }
 
+//    public void updateDataBase(String linkToCsvFile){
+//        try (FileInputStream inputStream = new FileInputStream(linkToCsvFile);
+//             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))){
+//            reader.readLine();  // the first line consists of the names of the columns. Let's skip it
+//            while (reader.ready()){
+//                institutions.add(reader.readLine().split(";"));
+//            }
+//        } catch (IOException e) {
+//            throw new RuntimeException("error while reading MSI-master.csv");
+//        }
+//    }
+
+    private InstitutionEntity getInstitution(String institutionInfo){
+        InstitutionEntity institution = new InstitutionEntity();
+        String[] parameters = institutionInfo.split(";");
+        institution.setState(parameters[0]);
+        institution.setName(parameters[1]);
+        institution.setInstitution(parameters[2]);
+        institution.setPhoneNumber(parameters[3]);
+        institution.setWebSite(parameters[4]);
+        return institution;
+    }
+
     public void saveEntitiesToDatabase (InstitutionRepository institutionRepository){
         List<String[]> listInstitutionEntity = parseInstitutionEntity();
         for (String[] institutionInfo: listInstitutionEntity) {
