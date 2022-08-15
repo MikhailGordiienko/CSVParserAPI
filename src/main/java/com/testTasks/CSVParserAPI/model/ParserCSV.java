@@ -19,11 +19,11 @@ public class ParserCSV {
         String pathToCSVFile = finder.findPathCSV();
         try (FileInputStream inputStream = new FileInputStream(pathToCSVFile);
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))){
-            boolean switсhed = false;
+            boolean firstLine = true;
             while (reader.ready()){
-                if (switсhed == false){
-                    switсhed = true;
+                if (firstLine){
                     reader.readLine();
+                    firstLine = false;
                     continue;
                 }
                 institutions.add(reader.readLine().split(";"));
