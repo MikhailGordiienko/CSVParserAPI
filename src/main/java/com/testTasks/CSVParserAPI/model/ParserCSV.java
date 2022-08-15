@@ -1,5 +1,9 @@
 package com.testTasks.CSVParserAPI.model;
 
+//check if not work
+import com.testTasks.CSVParserAPI.repository.InstitutionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+//check if not work
 import com.testTasks.CSVParserAPI.entity.InstitutionEntity;
 import com.testTasks.CSVParserAPI.repository.InstitutionRepository;
 import java.io.*;
@@ -8,6 +12,11 @@ import java.util.List;
 
 
 public class ParserCSV {
+
+    //check if not work
+    @Autowired
+    private InstitutionRepository institutionRepository;
+    //check if not work
     private FinderPath finder;
 
     public ParserCSV() {
@@ -34,17 +43,21 @@ public class ParserCSV {
         return institutions;
     }
 
-//    public void updateDataBase(String linkToCsvFile){
-//        try (FileInputStream inputStream = new FileInputStream(linkToCsvFile);
-//             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))){
-//            reader.readLine();  // the first line consists of the names of the columns. Let's skip it
-//            while (reader.ready()){
-//                institutions.add(reader.readLine().split(";"));
-//            }
-//        } catch (IOException e) {
-//            throw new RuntimeException("error while reading MSI-master.csv");
-//        }
-//    }
+    public void updateDataBase(String linkToCsvFile){
+        try (FileInputStream inputStream = new FileInputStream(linkToCsvFile);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))){
+            reader.readLine();  // the first line consists of the names of the columns. Let's skip it
+            while (reader.ready()){
+                InstitutionEntity newInstitution = getInstitution(reader.readLine());
+                if (institutionRepository.findByName(newInstitution.getName()) != null){
+                    institutionRepository.delete(newInstitution);
+                }
+                institutionRepository.save(newInstitution);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("error while downloading .csv file");
+        }
+    }
 
     private InstitutionEntity getInstitution(String institutionInfo){
         InstitutionEntity institution = new InstitutionEntity();
