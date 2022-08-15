@@ -1,8 +1,6 @@
 package com.testTasks.CSVParserAPI.controller;
 
 
-import com.testTasks.CSVParserAPI.model.FileManager;
-import com.testTasks.CSVParserAPI.model.FinderPath;
 import com.testTasks.CSVParserAPI.service.InstitutionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +15,6 @@ public class InstitutionController {
 
     @PostMapping("/update")
     public ResponseEntity updateDatabase(@RequestParam String linkForDownloading){
-        new FileManager().downloadRar(linkForDownloading);
         institutionService.updateListOfInstitutes(linkForDownloading);
         return ResponseEntity.ok("The list of Institute was updated");
     }
