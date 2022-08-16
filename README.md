@@ -1,6 +1,6 @@
  <h1 align="center">CSVParserAPI</h1>
 
-A server-side API that can download a .csv file in a .rar archive, parse it, 
+A server-side API that can download a .csv file, parse it, 
 save the data to a database, and return the data in json format
 __________________________
 
@@ -20,7 +20,6 @@ __________________________
     <li>MySQL</li>
     <li>Json</li>
     <li>Postman(For testing requests)</li>
-    <li>WinRar</li>
 </ul>
 <b><u></u></b>
 
@@ -28,9 +27,6 @@ _____________________________
 
 <h4>Server setup</h4>
 <ul>
-    <li>Install <b><u>"WinRar"</u></b>. Remember the path of the <b><u>"WinRar.exe"</u></b></li>
-    <li>In file <b><u>src/main/resources/pathToWinRarExe.txt</u></b>, delete all text. 
-Then write in it the full path to the file <b><u>WinRar.exe</u></b></li>
     <li>In file <b><u>src/main/resources/application.properties</u></b>, write the server settings
 (IP,Port,AdminName,AdminPassword)</li>
     <li>Сreate a MySQL database named <b><u>"csvparserapi"</u></b></li>
@@ -46,9 +42,9 @@ ____________________
     <li><h5>Where</h5></li>
     <li>body of the query - "http://localhost:8080/institutions/update?linkForDownloading="</li>
     <li>localhost - your IP</li>
-    <li>8080 - number of your Port</li>
-    <li>"linkForDownloading= any link, for download a rar file(csv has to named only <b><u>"MSI-master.csv"!!!</u></b>)</li>
-    <li>This request tells the server to download the file, unzip it, read the attached .csv file, and parse it. Enter all read entities into the database, and delete downloaded files.</li>
+    <li>8080 - number of port (this is the default port for spring applications)</li>
+    <li>"linkForDownloading= any link, for download .csv file</li>
+    <li>This request tells the server to download the file, parse it and enter all read entities into the database.</li>
 </ul>
     <h4>GET</h4>
     <li>Equals the names. Return a list of entities in json format</li>
