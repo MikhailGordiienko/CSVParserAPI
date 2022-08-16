@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.*;
 public class InstitutionController {
     @Autowired
     private InstitutionService institutionService;
-    @Autowired
-    private InstitutionRepository institutionRepository;
 
     @PostMapping("/update")
     public ResponseEntity updateDatabase(@RequestParam String linkForDownloading){
-        new ParserCSV().updateDataBase(linkForDownloading, institutionRepository);
+        institutionService.updateDataBase(linkForDownloading);
         return ResponseEntity.ok("The list of Institute was updated");
     }
 

@@ -8,9 +8,7 @@ import java.util.List;
 
 @Component
 public interface InstitutionRepository extends CrudRepository<InstitutionEntity, Long> {
-    InstitutionEntity findByName(String name);
-
-    InstitutionRepository deleteByName(String name);
+    InstitutionEntity findByNameEquals(String name);
 
     List<InstitutionEntity> findAll();
     List<InstitutionEntity> findAllByOrderByName();

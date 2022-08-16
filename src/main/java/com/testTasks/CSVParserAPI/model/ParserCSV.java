@@ -13,11 +13,7 @@ public class ParserCSV {
                 BufferedReader reader = new BufferedReader(inputStream)){
             reader.readLine();  // the first line consists of the names of the columns. Let's skip it
             while (reader.ready()){
-                InstitutionEntity newInstitution = getInstitution(reader.readLine());
-                InstitutionEntity foundInstitution = institutionRepository.findByName(newInstitution.getName());
-                if (foundInstitution != null){
-                      institutionRepository.deleteByName(foundInstitution.getName());
-                }
+                InstitutionEntity newInstitution = getInstitution(reader.readLine(), institutionRepository);
                 institutionRepository.save(newInstitution);
             }
         } catch (IOException e) {
@@ -25,9 +21,12 @@ public class ParserCSV {
         }
     }
 
-    private InstitutionEntity getInstitution(String institutionInfo){
-        InstitutionEntity institution = new InstitutionEntity();
+    private InstitutionEntity getInstitution(String institutionInfo, InstitutionRepository repository){
         String[] parameters = institutionInfo.split(";");
+        InstitutionEntity institution = repository.findByNameEquals(parameters[1]);
+        if(institution == null){
+            institution = new InstitutionEntity();
+        }
         institution.setState(parameters[0]);
         institution.setName(parameters[1]);
         institution.setInstitution(parameters[2]);
