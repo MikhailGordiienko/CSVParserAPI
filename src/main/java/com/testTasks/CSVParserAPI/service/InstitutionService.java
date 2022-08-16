@@ -15,44 +15,23 @@ public class InstitutionService {
     @Autowired
     private InstitutionRepository institutionRepository;
 
-    public List<Institution> findAll() {
-        List<Institution> institutions = new ArrayList<>();
-        var found = institutionRepository.findAll();
-        for (InstitutionEntity institutionEntity: found){
-            institutions.add(Institution.toModel(institutionEntity));
-        }
-        return institutions;
+    public List<InstitutionEntity> findAll() {
+        return institutionRepository.findAll();
     }
 
-    public List<Institution> sortByName() {
-        List<Institution> institutions = findAll();
-        institutions.sort((institution1, institution2) ->
-                institution1.getName().compareTo(institution2.getName())
-        );
-        return institutions;
+    public List<InstitutionEntity> sortByName() {
+        return institutionRepository.findAllByOrderByName();
     }
 
-    public List<Institution> sortByState() {
-        List<Institution> institutions = findAll();
-        institutions.sort((institution1, institution2) ->
-                institution1.getState().compareTo(institution2.getState())
-        );
-        return institutions;
+    public List<InstitutionEntity> sortByState() {
+        return institutionRepository.findAllByOrderByState();
     }
 
-    public List<Institution> sortByPhoneNumber() {
-        List<Institution> institutions = findAll();
-        institutions.sort((institution1, institution2) ->
-                institution1.getPhoneNumber().compareTo(institution2.getPhoneNumber())
-        );
-        return institutions;
+    public List<InstitutionEntity> sortByPhoneNumber() {
+        return institutionRepository.findAllByOrderByPhoneNumber();
     }
 
-    public List<Institution> sortByInstitution() {
-        List<Institution> institutions = findAll();
-        institutions.sort((institution1, institution2) ->
-                institution1.getInstitution().compareTo(institution2.getInstitution())
-        );
-        return institutions;
+    public List<InstitutionEntity> sortByInstitution() {
+        return institutionRepository.findAllByOrderByInstitution();
     }
 }
