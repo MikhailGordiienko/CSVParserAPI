@@ -2,8 +2,6 @@ package com.testTasks.CSVParserAPI.service;
 
 
 import com.testTasks.CSVParserAPI.entity.InstitutionEntity;
-import com.testTasks.CSVParserAPI.model.DatabaseManager;
-import com.testTasks.CSVParserAPI.model.FileManager;
 import com.testTasks.CSVParserAPI.model.Institution;
 import com.testTasks.CSVParserAPI.repository.InstitutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +15,6 @@ public class InstitutionService {
     @Autowired
     private InstitutionRepository institutionRepository;
 
-    public void updateListOfInstitutes(String linkForDownloading) {
-        FileManager fileManager = new FileManager();
-        DatabaseManager databaseManager = new DatabaseManager();
-        fileManager.downloadRar(linkForDownloading);
-        fileManager.unrarCSV();
-        fileManager.removeRar();
-        databaseManager.saveEntityToDatabase(institutionRepository);
-        fileManager.removeCSV();
-    }
     public List<Institution> findAll() {
         List<Institution> institutions = new ArrayList<>();
         var found = institutionRepository.findAll();

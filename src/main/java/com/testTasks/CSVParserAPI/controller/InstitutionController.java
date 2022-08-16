@@ -1,6 +1,8 @@
 package com.testTasks.CSVParserAPI.controller;
 
 
+import com.testTasks.CSVParserAPI.model.ParserCSV;
+import com.testTasks.CSVParserAPI.repository.InstitutionRepository;
 import com.testTasks.CSVParserAPI.service.InstitutionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 public class InstitutionController {
     @Autowired
     private InstitutionService institutionService;
+    @Autowired
+    private InstitutionRepository institutionRepository;
 
     @PostMapping("/update")
     public ResponseEntity updateDatabase(@RequestParam String linkForDownloading){
-        institutionService.updateListOfInstitutes(linkForDownloading);
+        new ParserCSV().updateDataBase(linkForDownloading, institutionRepository);
         return ResponseEntity.ok("The list of Institute was updated");
     }
 

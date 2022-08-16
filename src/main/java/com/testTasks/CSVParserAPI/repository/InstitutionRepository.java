@@ -7,4 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public interface InstitutionRepository extends CrudRepository<InstitutionEntity, Long> {
     InstitutionEntity findByName(String name);
+
+    InstitutionRepository deleteByName(String name);
+
 }
